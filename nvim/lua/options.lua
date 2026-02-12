@@ -52,3 +52,21 @@ vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50"
 -- hide commandline
 vim.opt.cmdheight = 0
 vim.opt.showcmd = false
+
+-- COBOL-specific settings for Neovim
+
+-- Tab settings
+vim.opt_local.tabstop = 8        -- Number of spaces a tab counts for
+vim.opt_local.shiftwidth = 8     -- Number of spaces for indentation
+vim.opt_local.expandtab = true   -- Convert tabs to spaces
+
+-- COBOL traditionally uses fixed-format with specific column positions
+-- Uncomment these if you want visual guides for COBOL columns
+-- vim.opt_local.colorcolumn = "7,73"  -- Mark columns 7 and 73
+
+-- If you're using fixed-format COBOL (traditional style)
+-- vim.opt_local.textwidth = 72
+
+-- Line numbering (helpful for debugging)
+vim.opt_local.number = true
+vim.opt_local.relativenumber = false
