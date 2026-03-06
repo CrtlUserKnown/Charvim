@@ -1,0 +1,83 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Test setup.sh
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  test-setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Make setup.sh executable
+        run: chmod +x setup.sh
+
+      - name: Test fresh installation
+        run: |
+          ./setup.sh
+          if [ -L "$HOME/.config/nvim" ]; then
+            echo "Symlink created successfully"
+            TARGET=$(readlink "$HOME/.config/nvim")
+            echo "Symlink points to: $TARGET"
+            if [[ "$TARGET" == "$(pwd)/nvim" ]]; then
+              echo "Symlink target is correct"
+            else
+              echo "Symlink target is incorrect. Expected $(pwd)/nvim, got $TARGET"
+              exit 1
+            fi
+          else
+            echo "Symlink not created"
+            exit 1
+          fi
+
+          if [ -d "$HOME/.config/nvim" ]; then
+             echo "Nvim config directory exists via symlink"
+          else
+             echo "Nvim config directory does not exist"
+             exit 1
+          fi
+
+      - name: Test backup of existing config
+        run: |
+          # Clean up previous install and backups for a clean test state
+          rm -f "$HOME/.config/nvim"
+          rm -rf "$HOME/.config/nvim.bak."*
+          
+          # Create a dummy config
+          mkdir -p "$HOME/.config/nvim"
+          touch "$HOME/.config/nvim/init.lua"
+          echo "old config" > "$HOME/.config/nvim/init.lua"
+          
+          # Run setup
+          ./setup.sh
+          
+          # Check if backup exists
+          BACKUP=$(ls -d "$HOME/.config"/nvim.bak.* | head -n 1)
+          if [ -n "$BACKUP" ]; then
+            echo "Backup created at $BACKUP"
+            if [ -f "$BACKUP/init.lua" ] && [ "$(cat $BACKUP/init.lua)" == "old config" ]; then
+              echo "Backup content is correct"
+            else
+              echo "Backup content is missing or incorrect"
+              exit 1
+            fi
+          else
+            echo "Backup was not created"
+            exit 1
+          fi
+
+          
+          # Check if symlink is restored
+          if [ -L "$HOME/.config/nvim" ]; then
+            echo "Symlink recreated successfully"
+          else
+            echo "Symlink not recreated"
+            exit 1
+          fi
+
