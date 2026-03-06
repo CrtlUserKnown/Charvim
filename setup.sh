@@ -89,7 +89,10 @@ fi
 
 # Step: Source Detection
 IS_CLONED=false
-if [[ -d ".git" ]] && [[ -d "nvim" ]] && [[ "$(git remote get-url origin 2>/dev/null)" == *"$REPO_URL"* ]]; then
+REMOTE_URL=$(git remote get-url origin 2>/dev/null | tr '[:upper:]' '[:lower:]')
+REPO_PATTERN=$(echo "$REPO_URL" | tr '[:upper:]' '[:lower:]' | sed 's/\.git$//')
+
+if [[ -d ".git" ]] && [[ -d "nvim" ]] && [[ "$REMOTE_URL" == *"$REPO_PATTERN"* ]]; then
     IS_CLONED=true
     SOURCE_DIR="$(pwd)"
 fi
