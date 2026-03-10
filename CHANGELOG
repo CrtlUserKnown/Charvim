@@ -2,23 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.2.0] - 2026-03-09
+## [1.1.0] - 2026-03-10
 
 ### Added
-- **debugger**: Integrated DAP debuggers for enhanced debugging capabilities.
+- **debugger**: Integrated DAP debuggers for Java, Swift, Python, and C/C++ with customized UI layouts and session management.
 - **setup**: Added a `setup.sh` script for easier installation and environment configuration.
 - **languages**: Improved COBOL support via specialized ftplugins.
 - **CI**: GitHub Actions workflow for automated setup testing.
 
 ### Fixed
-- **setup**: Fixed issues related to symlink creation during installation.
+- **setup**: Fixed issues related to symlink creation and repository source detection during installation.
 
 ## [0.1.0] - 2026-03-05
 
 ### Added
 - **copilot**: Integrated GitHub Copilot for AI-assisted coding.
 - **CLI**: Renamed configuration entry point to `charvim`, allowing users to use `cvim` instead of `nvim`.
-- **documentation**: Created comprehensive `README.md` and initial project documentation.
+- **LSP**: Comprehensive Language Server Protocol configuration via `mason.nvim` with specialized handlers for Java (JDTLS), Typst (Tinymist), and Go (Gopls).
+- **UI**: Implemented a beautiful dashboard with `alpha-nvim`, enhanced cmdline/popups with `noice.nvim`, and adopted the `rose-pine` colorscheme.
+- **Navigation**: Integrated `telescope.nvim` for fuzzy finding, `harpoon2` for quick file switching, and `vim-tmux-navigator` for seamless pane management.
+- **Editing**: Added `nvim-surround` for delimiter manipulation and `vim-visual-multi` for multiple cursors.
+- **Wiki**: Added official project documentation via the GitHub Wiki.
 
 ### Changed
 - Initial project structure and configuration migration.
