@@ -61,3 +61,8 @@ vim.api.nvim_create_autocmd("FileType", {
         end
     end
 })
+
+local dap_ok, _ = pcall(require, 'dap')
+if dap_ok then
+    require('dap-config')
+end

@@ -192,6 +192,36 @@ return
         end,
     },
 
+    -- DAP
+    {
+        'mfussenegger/nvim-dap',
+        dependencies = {
+            'rcarriga/nvim-dap-ui',
+            'nvim-neotest/nvim-nio',
+            'jay-babu/mason-nvim-dap.nvim',
+            'mfussenegger/nvim-dap-python',
+        },
+        config = function()
+            require('dap-config')
+        end,
+    },
+
+    -- Mason DAP installer
+    {
+        'jay-babu/mason-nvim-dap.nvim',
+        dependencies = { 'williamboman/mason.nvim', 'mfussenegger/nvim-dap' },
+        config = function()
+            require('mason-nvim-dap').setup({
+                ensure_installed = {
+                    'python',   -- debugpy
+                    'javadbg',  -- java-debug
+                    'codelldb', -- c, c++, swift
+                },
+                automatic_installation = true,
+            })
+        end,
+    },
+
     -- noice.nvim - Better UI for cmdline and popups
     {
         "folke/noice.nvim",
