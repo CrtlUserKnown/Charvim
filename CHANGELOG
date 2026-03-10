@@ -1,0 +1,24 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [0.2.0] - 2026-03-09
+
+### Added
+- **debugger**: Integrated DAP debuggers for enhanced debugging capabilities.
+- **setup**: Added a `setup.sh` script for easier installation and environment configuration.
+- **languages**: Improved COBOL support via specialized ftplugins.
+- **CI**: GitHub Actions workflow for automated setup testing.
+
+### Fixed
+- **setup**: Fixed issues related to symlink creation during installation.
+
+## [0.1.0] - 2026-03-05
+
+### Added
+- **copilot**: Integrated GitHub Copilot for AI-assisted coding.
+- **CLI**: Renamed configuration entry point to `charvim`, allowing users to use `cvim` instead of `nvim`.
+- **documentation**: Created comprehensive `README.md` and initial project documentation.
+
+### Changed
+- Initial project structure and configuration migration.
