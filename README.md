@@ -2,7 +2,7 @@
 
 Charvim is a custom Neovim configuration designed for efficiency, speed, and a seamless development experience. It features a curated selection of plugins and configurations for LSP, treesitter, status lines, and more.
 
-## 📖 Documentation & Usage
+## Documentation & Usage
 
 For detailed information on how to use and customize this version of Neovim, please refer to the official wiki:
 
