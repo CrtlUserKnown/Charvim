@@ -22,6 +22,7 @@ vim.api.nvim_set_hl(0, 'CursorLineNr', {
 
 require('statusline')
 require('options')
+require('indent-guides')
 require('keymaps')
 require('theme-switcher')
 require('multicursor').setup()
