@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.5] - 2026-07-02
+
+### Added
+- **indent-guides**: New indent guide lines for better visual alignment in code.
+- **logo**: Added CharVim logo SVG to README.
+
 ## [1.5.4] - 2026-06-30
 
 This release moves the Charvim installation directory from `~/.config/charvim` to `~/.charvim` to avoid conflicts with other Neovim configurations.
