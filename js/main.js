@@ -223,6 +223,81 @@ function initNvimTyper() {
   loop();
 }
 
+/* === CHANGELOG === */
+async function initChangelog() {
+  const wrap = document.getElementById('cl-dynamic');
+  if (!wrap) return;
+
+  let text;
+  try {
+    const res = await fetch('CHANGELOG');
+    if (!res.ok) throw new Error();
+    text = await res.text();
+  } catch {
+    wrap.innerHTML = '<p style="text-align:center;color:var(--subtle)">Could not load changelog. '
+      + '<a href="https://github.com/CrtlUserKnown/Charvim/blob/main/CHANGELOG" target="_blank" rel="noopener">View on GitHub ↗</a></p>';
+    return;
+  }
+
+  wrap.innerHTML = renderChangelog(text);
+}
+
+function renderChangelog(raw) {
+  const entries = [];
+  let cur = null, sec = null, sumLines = [];
+
+  for (const line of raw.split('\n')) {
+    const vMatch = line.match(/^## \[([^\]]+)\]\s*-\s*(\d{4}-\d{2}-\d{2})(?:\s+—\s+(.+))?/);
+    if (vMatch) {
+      if (cur) { cur.summary = sumLines.join(' '); entries.push(cur); }
+      cur = { version: vMatch[1], date: vMatch[2], title: (vMatch[3] || '').trim(), summary: '', sections: [] };
+      sec = null; sumLines = [];
+      continue;
+    }
+    if (!cur) continue;
+
+    const sMatch = line.match(/^### (.+)/);
+    if (sMatch) {
+      if (sumLines.length) cur.summary = sumLines.join(' ');
+      sec = { label: sMatch[1].trim(), items: [] };
+      cur.sections.push(sec);
+      continue;
+    }
+
+    if (line.startsWith('- ') && sec) { sec.items.push(line.slice(2)); continue; }
+    if (!sec && line.trim() && !line.startsWith('#')) sumLines.push(line.trim());
+  }
+  if (cur) { cur.summary = sumLines.join(' '); entries.push(cur); }
+
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const inline = s => s.split(/(`[^`]+`)/).map((p, i) =>
+    i % 2 ? `<code>${esc(p.slice(1,-1))}</code>` : esc(p).replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+  ).join('');
+  const stripPfx = s => s.replace(/^\*\*[^*]+\*\*:\s*/, '');
+
+  const html = entries.map((e, i) => {
+    const [y,m,d] = e.date.split('-');
+    const dateStr = `${MONTHS[+m-1]} ${+d}, ${y}`;
+    const badge = i === 0 ? '<span class="cl-badge latest">Latest</span>' : '';
+    const title = e.title ? `\n      <h2 class="cl-title">${esc(e.title)}</h2>` : '';
+    const summary = e.summary ? `\n      <p class="cl-summary">${inline(e.summary)}</p>` : '';
+    const secs = e.sections.map(s => {
+      const cls = s.label.toLowerCase();
+      const items = s.items.map(it => `<li>${inline(stripPfx(it))}</li>`).join('');
+      return `<div class="cl-section">\n          <span class="cl-section-label ${cls}">${esc(s.label)}</span>\n          <ul class="cl-list ${cls}">${items}</ul>\n        </div>`;
+    }).join('\n        ');
+    const secsHtml = secs ? `\n      <div class="cl-sections">\n        ${secs}\n      </div>` : '';
+    return `    <article class="cl-entry">\n      <div class="cl-header">\n        <span class="cl-version">v${esc(e.version)}</span>\n        ${badge}\n        <span class="cl-date">${esc(dateStr)}</span>\n      </div>${title}${summary}${secsHtml}\n    </article>`;
+  }).join('\n\n');
+
+  return html
+    + '\n\n    <div style="text-align:center;margin-top:1rem;">'
+    + '<a class="btn btn-secondary" href="https://github.com/CrtlUserKnown/Charvim/blob/main/CHANGELOG"'
+    + ' target="_blank" rel="noopener">View raw CHANGELOG on GitHub ↗</a></div>';
+}
+
 /* === DOCS SIDEBAR SCROLL HIGHLIGHT === */
 function initDocsSidebar() {
   const headings = document.querySelectorAll('.docs-content h2[id], .docs-content h3[id]');
@@ -264,4 +339,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initThemePreviews();
   initThemeFab();
   initNvimTyper();
+  initChangelog();
 });
