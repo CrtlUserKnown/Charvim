@@ -2,6 +2,9 @@
 -- Author: CrtlUserKnown
 -- Version: 1.5.5
 
+-- core ui 2
+require(vim._core.ui2).enabled({})
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
@@ -94,4 +97,3 @@ vim.api.nvim_create_autocmd("FileType", {
         end
     end
 })
-
