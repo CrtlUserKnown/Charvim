@@ -3,7 +3,7 @@
 -- Version: 1.5.5
 
 -- core ui 2
-require(vim._core.ui2).enabled({})
+require('vim._core.ui2').enable({})
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
